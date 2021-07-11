@@ -4,12 +4,13 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
 
-### More Information
+### whoami
 
-A place to include any other types of information that you'd like to include about yourself.
+Bonjour je m'appelle clément je suis
+un passionée d'infosec
 
 ### Contact me
+Discord: Sans23#1571
 
-[email@domain.com](mailto:email@domain.com)
+Twitter: @_sans23

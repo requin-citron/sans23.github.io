@@ -1,6 +1,7 @@
 ---
 layout: post
 title: midnightCTF return_room
+tag: pwn
 ---
 
 **_PWN_**
