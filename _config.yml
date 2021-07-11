@@ -1,6 +1,7 @@
 #
 # This file contains configuration flags to customize your site
 #
+title: Sans23
 
 # Name of your site (displayed in the header)
 name: Sans23
@@ -21,7 +22,7 @@ footer-links:
   email:
   facebook:
   flickr:
-  github: barryclark/jekyll-now
+  github: requin-citron
   instagram:
   linkedin:
   pinterest:
