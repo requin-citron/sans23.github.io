@@ -8,7 +8,7 @@ permalink: /about/
 ### whoami
 
 Bonjour je m'appelle clément je suis
-un passionée d'infosec
+un passioné d'infosec
 
 ### Contact me
 Discord: Sans23#1571
