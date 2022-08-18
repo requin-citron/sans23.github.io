@@ -33,7 +33,7 @@ J'avais un examen partiel de Systèmes et réseaux le matin et toute l'aprés-mi
 
 **Le jour J**
 
-Le reveil sonne a 00h30. Je me connecte sur la plateforme et fais ma vérification d'identité puis c'est parti ! Je commande un Uber eat et je commence. Les modalités de l'examen ont évoluées. J'ai le donc un AD que je dois absolument pawn pour réussir.
+Le reveil sonne a 00h30. Je me connecte sur la plateforme et fais ma vérification d'identité puis c'est parti ! Je commande un Uber eat et je commence. Les modalités de l'examen ont évoluées. J'ai le donc un AD que je dois absolument pwn pour réussir.
 
 **Active Directory**
 
