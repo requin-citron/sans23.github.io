@@ -13,7 +13,7 @@ Actuellement dans un train arrêté sur la voie depuis plus 1h et sans réseau j
 
 # **Concept**
 
-Notre but est de récupérer la passphrase luks d'une partition. Le bruteforce de partition luks est trés lent ce que rendent les attaques par dictionnaire quasiment impossible. Il reste la solution du social engenering, il est possible d'utiliser un keylogger hardware et récupérer la passphrase via un réseau wifi ou bluetooth ou de le faire de manière software. Nous verrons comment mettre en place cette dernière.
+Notre but est de récupérer la passphrase luks d’une partition. Le bruteforce de partition luks est trés lent cela rend les attaques par dictionnaire inefficace. Il nous reste le social engineering, où il est possible d’utiliser un keylogger hardware afin derécupérer la passphrase via un réseau wifi ou bluetooth. Il est aussi possible de le faire de manière software, il s'agit de la méthode que nous utiliserons/mettrons en pratique.
 
 
 # **Theorie**
