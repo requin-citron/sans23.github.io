@@ -36,9 +36,9 @@ Dans la suite de l'article nous allons utiliser debian.
 
 ## **Comprendre initramfs**
 
-initramfs est une archive compressée contenue dans /boot qui possède un système de fichiers qui sera chargé en ram. Un script situé dans /init est exécuté et viendra monter les partitions dans un nouveau répertoire root et finir par exécuter un chroot dedans puis à exécuter systemd.
+initramfs est une archive compressée contenue dans /boot qui possède un système de fichiers qui sera chargé en ram. Un script situé dans /init est exécuté et viendra monter les partitions dans un nouveau répertoire root et finira par exécuter un chroot dedans puis à exécuter systemd.
 
-Il est possible d'analyser le contenu de cette archive en l'extrayant. L'algorithme de compression peut varier selon les distributions il faut donc utiliser la commande **file** pour déterminer celui-ci. Il restera ensuite une archive cpio.
+Il est possible d’analyser le contenu de cette archive en l’extrayant. L’algorithme de compression peut varier en fonction des distributions, il faut donc utiliser la commande file pour pouvoir le déterminer. Il en résultera une archive cpio.
 
 ```
 mkdir -p work && cd work
@@ -51,19 +51,19 @@ cpio -idv < ./initrd.img-5.10.0-10-amd64
 
 ## **mise en pratique**
 
-En navigant dans le système de fichiers on trouve trés vite le script en charge de la partion luks.
+En navigant dans le système de fichiers on trouve très vite le script en charge de la partion luks.
 
 > ./scripts/local-top/cryptroot
 
 ![](../images/initramfs_luks/default.png)
 
-run_keyscript vient appeler le binaire askpass permettant de récupérer le password puis le copy sur la sortie standard. La passphrase est envoyé à unlock_mapping.
+run_keyscript va appeler le binaire askpass qui va récupérer le mot passe, puis il va être copier sur la sortie standard, enfin, la passpharse est envoyé à unlock_mapping.
 
 ![](../images/initramfs_luks/modified.png)
 
-La modification permet de stocker la passphrase sur le système de fichiers dans /.init, cela nous servira plus loin.
+La modification ci-dessus permet de stocker la passphrase sur le système de fichiers dans /.init, cela nous sera utile prochainement.
 
-Par défaut les partions sont montés en read-only.Il faut donc modifier le script init pour désactiver le RO et de rajouter une crontab permettant d'envoyer le password sur le réseau.
+Par défaut les partions sont montés en read-only. Donc il faut modifier le script init pour désactiver le RO et il faut aussi rajouter une crontab permettant d’envoyer le password sur le réseau.
 
 Pour cela rendez-vous dans
 > ./init
@@ -73,11 +73,11 @@ Pour cela rendez-vous dans
 
 Il faut donc modifier la variables readonly en lui assignant **n** pour pouvoir modifier par la suite le système de fichiers.
 
-Il ne reste plus qu'à rajouter une commande juste avant le chroot sur le nouveau système de fichiers pour ajouter une ligne dans la crontab et ainsi récupérer la passphrase une fois la machine bootée.
+Nous allons rajouter une commande juste avant le chroot sur le nouveau système de fichiers pour ajouter une ligne dans la crontab et ainsi récupérer la passphrase une fois la machine bootée.
 
 ![](../images/initramfs_luks/init_modified.png)
 
-Il ne reste plus qu'à recompresser notre archive et s'en servir pour remplacer l'archive légitime
+Une fois les modifications terminées nous avons besoin de recompresser notre archive et s'en servir pour remplacer l'archive légitime.
 
 ```
 find . | cpio -oH newc | gzip > /boot/initrd.img-5.10.0-10-amd64
